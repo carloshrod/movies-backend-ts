@@ -6,7 +6,9 @@ import router from './routes/index.routes';
 import errorHandler from './middlewares/errorHandler';
 dotenv.config();
 
+// Settings
 const app = express();
+const PORT = Number(process.env.PORT) ?? 5000;
 
 // Middlewares
 app.use(morgan('dev'));
@@ -21,7 +23,6 @@ app.use(router);
 app.use(errorHandler);
 
 // Start server
-const PORT = process.env.PORT ?? 5000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n********** Server listening on port ${PORT} **********`);
 });
