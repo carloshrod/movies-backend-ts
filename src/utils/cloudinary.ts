@@ -13,7 +13,7 @@ cloudinary.config({
 
 export const uploadImage = async (filePath: string): Promise<UploadApiResponse> => {
   return await cloudinary.uploader.upload(filePath, {
-    folder: 'app-movies-posters-test'
+    folder: 'app-movies-posters'
   });
 };
 
