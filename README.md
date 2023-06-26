@@ -1,6 +1,6 @@
 # Movies App - Backend
 
-API developed with Node, Express and TypeScript, and used by the project [movies-frontend](https://github.com/carloshrod/movies-frontend).
+API developed with Node, Express, TypeScript and PostgreSQL, and used by the project [movies-frontend](https://github.com/carloshrod/movies-frontend).
 
 ## Technologies and libraries
 
