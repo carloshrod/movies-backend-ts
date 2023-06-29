@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import config from '../config';
+import config from '../config/config';
 
 const deleteTempFiles = async (): Promise<void> => {
   if (config.TEMP_FILES_PATH) {

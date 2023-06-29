@@ -1,5 +1,5 @@
 import { deleteImage, uploadImage } from '../utils/cloudinary';
-import { findMoviePoster } from './movies.services';
+import { findMoviePosterService } from './movies.services';
 import type { Poster } from '../types';
 import type fileUpload from 'express-fileupload';
 import type { FileArray } from 'express-fileupload';
@@ -22,11 +22,12 @@ const setPoster = async (files: FileArray | null | undefined): Promise<Poster> =
 const updatePoster = async (req: Request): Promise<Poster> => {
   const { id } = req.params;
   const { files } = req;
-  const moviePoster = await findMoviePoster(id);
+  const moviePoster = await findMoviePosterService(id);
+  let image;
 
   const posterFile = files?.poster as fileUpload.UploadedFile;
-  const image = posterFile && (await uploadImage(posterFile.tempFilePath));
-  if (posterFile && moviePoster.id) {
+  if (posterFile && moviePoster?.id) {
+    image = await uploadImage(posterFile.tempFilePath);
     await deleteImage(moviePoster?.id);
   }
   await deleteTempFiles();

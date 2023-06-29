@@ -1,30 +1,22 @@
-import { check, validationResult } from 'express-validator';
+import { check } from 'express-validator';
+import validateResult from '../utils/validateResult';
 import { Language, Rating } from '../enums';
+import type { Meta } from 'express-validator';
 import type { NextFunction, Request, Response } from 'express';
 
-// Utils
-const validateResult = (req: Request, res: Response, next: NextFunction): void => {
-  const errors = validationResult(req);
-  if (errors.isEmpty()) {
-    next();
-  } else {
-    const error = new Error('Validation error!');
-    res.status(400).send({ errors: errors.array() });
-    next(error);
-  }
-};
-
-const isNotEmpty = (value: string): boolean => {
+// Custom validators
+const isNotEmpty = (value: string, meta: Meta): boolean => {
   if (!value || value.trim().length === 0) {
-    throw new Error('Field required!');
+    throw new Error(`Field "${meta.path}" is required`);
   }
   return true;
 };
 
-const isURLWithProtocol = (value: string): boolean => {
-  const regex = /^(https?:\/\/)/;
+const isValidURL = (value: string): boolean => {
+  const regex =
+    /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
   if (!regex.test(value)) {
-    throw new Error('URL must start with "http://" or "https://"!');
+    throw new Error('Field "trailer" must be a valid URL. Ex: https://valid-url.com');
   }
   return true;
 };
@@ -37,29 +29,24 @@ const validateMovie = [
     .custom(isNotEmpty)
     .isString()
     .isIn(Object.values(Language))
-    .withMessage('Invalid language!'),
+    .withMessage('Invalid language'),
   check('rating')
     .exists()
     .custom(isNotEmpty)
     .isString()
     .isIn(Object.values(Rating))
-    .withMessage('Invalid rating!'),
+    .withMessage('Invalid rating'),
   check('duration')
     .exists()
     .custom(isNotEmpty)
     .isInt({ min: 1, max: 999, allow_leading_zeroes: false })
-    .withMessage('Must be a number between 1 and 999. No leading zeros!'),
+    .withMessage('Field "duration" must be a number between 1 and 999. No leading zeros'),
   check('release_date')
     .exists()
     .custom(isNotEmpty)
     .isDate()
-    .withMessage('Must be a valid date format!'),
-  check('trailer')
-    .exists()
-    .custom(isNotEmpty)
-    .isURL()
-    .withMessage('Must be a valid URL!')
-    .custom(isURLWithProtocol),
+    .withMessage('Field "release date" must be a valid date format'),
+  check('trailer').exists().custom(isNotEmpty).custom(isValidURL),
   check('sinopsis').exists().custom(isNotEmpty).isString(),
   check('director').exists().custom(isNotEmpty).isString(),
   check('casting').exists().custom(isNotEmpty).isString(),

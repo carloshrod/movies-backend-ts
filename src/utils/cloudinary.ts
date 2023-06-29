@@ -1,19 +1,19 @@
 import { v2 as cloudinary } from 'cloudinary';
 import type { UploadApiResponse } from 'cloudinary';
-import config from '../config';
+import config from '../config/config';
 
-const { cloud } = config;
+const { CLOUD, MOVIES_POSTERS_FOLDER } = config;
 
 cloudinary.config({
-  cloud_name: cloud.name,
-  api_key: cloud.api_key,
-  api_secret: cloud.api_secret,
+  cloud_name: CLOUD.NAME,
+  api_key: CLOUD.API_KEY,
+  api_secret: CLOUD.API_SECRET,
   secure: true
 });
 
 export const uploadImage = async (filePath: string): Promise<UploadApiResponse> => {
   return await cloudinary.uploader.upload(filePath, {
-    folder: 'app-movies-posters'
+    folder: MOVIES_POSTERS_FOLDER
   });
 };
 

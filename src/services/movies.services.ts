@@ -101,19 +101,9 @@ const findMoviesByTitle = async (title: string): Promise<MovieEntry[]> => {
 
 const findMoviePoster = async (id: string): Promise<Poster> => {
   const result = await pool.query('SELECT poster FROM movies WHERE id = $1', [id]);
-  const poster: Poster = result.rows[0].poster;
+  const poster: Poster = result.rows[0]?.poster;
 
   return poster;
-};
-
-const findMovieByUniqueKey = async (title: string, trailer: string): Promise<MovieEntry> => {
-  const result = await pool.query('SELECT * FROM movies WHERE title = $1 OR trailer = $2', [
-    title,
-    trailer
-  ]);
-  const foundMovie: MovieEntry = result.rows[0];
-
-  return foundMovie;
 };
 
 export {
@@ -123,6 +113,5 @@ export {
   deleteMovie as deleteMovieService,
   findOneMovie as findOneMovieService,
   findMoviesByTitle as findMoviesByTitleService,
-  findMoviePoster,
-  findMovieByUniqueKey
+  findMoviePoster as findMoviePosterService
 };
