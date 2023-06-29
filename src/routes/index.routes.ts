@@ -11,6 +11,10 @@ router.get('/', (_req, res) => {
     `);
 });
 
+router.use('/api/v1/ping', (_req, res) => {
+  return res.status(200).send({ ChrodApiSays: 'Server status is OK!' });
+});
+
 router.use('/api/v1/movies', movieRoutes);
 
 export default router;

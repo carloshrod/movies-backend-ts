@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from 'express';
+import type { Handler } from 'express';
 import {
   findMoviesService,
   createMovieService,
@@ -8,102 +8,76 @@ import {
   findMoviesByTitleService
 } from '../services/movies.services';
 
-const findMovies = async (
-  _req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | undefined> => {
+const findMovies: Handler = async (_req, res, next) => {
   try {
     const allMovies = await findMoviesService();
 
-    return res.status(200).json({ movies: allMovies });
-  } catch (error: unknown) {
+    if (allMovies.length === 0) return res.status(204).send();
+
+    return res.status(200).json(allMovies);
+  } catch (error) {
     next(error);
-    return undefined;
   }
 };
 
-const createMovie = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | undefined> => {
+const createMovie: Handler = async (req, res, next) => {
   try {
+    if (!req.files) {
+      throw new Error('No file uploaded!');
+    }
+
     const savedMovie = await createMovieService(req);
 
-    return res.status(201).json({
-      msg: 'Movie created successfully!',
-      savedMovie
-    });
+    return res.status(201).json(savedMovie);
   } catch (error) {
     next(error);
-    return undefined;
   }
 };
 
-const updateMovie = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | undefined> => {
+const updateMovie: Handler = async (req, res, next) => {
   try {
     const updatedMovie = await updateMovieService(req);
-    if (!updatedMovie) return res.status(404).json({ message: 'Error updating movie!' });
+    if (!updatedMovie) return res.status(204).send();
 
-    return res.status(200).json({
-      msg: 'Movie updated successfully!',
-      updatedMovie
-    });
+    return res.status(200).json(updatedMovie);
   } catch (error) {
     next(error);
-    return undefined;
   }
 };
 
-const deleteMovie = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | undefined> => {
+const deleteMovie: Handler = async (req, res, next) => {
   try {
     const { id } = req.params;
 
     const wasDeleted = await deleteMovieService(id);
-    if (!wasDeleted) return res.status(404).json({ msg: 'Error deleting movie!' });
+    if (!wasDeleted) return res.status(204).send();
 
-    return res.status(200).json({ msg: 'Movie deleted successfully!' });
+    return res.status(200).send();
   } catch (error) {
     next(error);
-    return undefined;
   }
 };
 
-const findOneMovie = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response | undefined> => {
+const findOneMovie: Handler = async (req, res, next) => {
   try {
     const { id } = req.params;
     const movie = await findOneMovieService(id);
-    if (!movie) return res.status(404).json({ msg: 'Movie not found!' });
+    if (!movie) return res.status(204).send();
 
-    return res.json({ movie });
+    return res.json(movie);
   } catch (error) {
     next(error);
-    return undefined;
   }
 };
 
-const findMoviesByTitle = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+const findMoviesByTitle: Handler = async (req, res, next) => {
   try {
     const { title } = req.params;
     const foundMovies = await findMoviesByTitleService(title);
-    res.json({ foundMovies });
+
+    if (foundMovies.length === 0) return res.status(204).send();
+
+    return res.status(200).json(foundMovies);
   } catch (error) {
     next(error);
   }

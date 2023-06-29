@@ -1,28 +1,31 @@
-import type { NextFunction, Request, Response } from 'express';
+import type { Response } from 'express';
 import deleteTempFiles from '../utils/deleteTempFiles';
 
 const ERRORS: any = {
   '23505': (res: Response) =>
-    res.status(400).send({ msg: 'There is already a movie with this title or trailer!' }),
-  '42P01': (res: Response) => res.status(400).send({ msg: 'Database error!' }),
-  '42703': (res: Response) => res.status(500).send({ msg: 'Internal server error!' }),
+    res.status(409).send({ msg: 'There is already a movie with this title or trailer!' }),
+  '22P02': (res: Response) => res.status(400).send({ msg: 'Invalid uuid!' }),
   defaultError: (res: Response) =>
-    res.status(500).send({ msg: 'Unknown error. Please try it later!' }).end()
+    res.status(500).send({ msg: 'Something went wrong. Please try it later!' }).end()
 };
 
 const errorHandler = async (
   error: any,
-  _req: Request,
+  _req: any,
   res: Response,
-  _next: NextFunction
-): Promise<Response> => {
-  console.error(error);
-  await deleteTempFiles();
-  if (error.code) {
-    const handler = ERRORS[error.code] || ERRORS.defaultError;
-    return handler(res, error);
+  _next: any
+): Promise<Response | undefined> => {
+  try {
+    await deleteTempFiles();
+    console.log(error);
+    if (error.code) {
+      const handler = ERRORS[error.code] || ERRORS.defaultError;
+      return handler(res, error);
+    }
+    return res.status(400).send({ msg: error.message });
+  } catch (err) {
+    console.error(err);
   }
-  return res.status(400).send({ msg: error.message });
 };
 
 export default errorHandler;

@@ -1,5 +1,5 @@
 import fileUpload from 'express-fileupload';
-import config from '../config';
+import config from '../config/config';
 
 const uploadFile = fileUpload({
   useTempFiles: true,
