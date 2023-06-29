@@ -4,6 +4,9 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import router from './routes/index.routes';
 import errorHandler from './middlewares/errorHandler';
+import swaggerUI from 'swagger-ui-express';
+import specs from './config/swaggerSpecs';
+
 dotenv.config();
 
 // Settings
@@ -18,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Router
 app.use(router);
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(specs));
 
 // Errors middleware
 app.use(errorHandler);
