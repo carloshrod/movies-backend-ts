@@ -11,7 +11,7 @@ API developed with Node, Express, TypeScript and PostgreSQL, and used by the pro
 - **GET /movies/{id}** - Get a movie by id
 - **GET /movies/search/{title}** - Get movies by title
 
-Check the <a href="https://movies-backend-ts.up.railway.app/docs/" target="_blank"><b>swagger documentation</b></a>.
+Check the [**swagger documentation**](https://movies-backend-ts.up.railway.app/docs/).
 
 ## Technologies and libraries
 - Node
