@@ -11,12 +11,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:5000/api/v1',
-        description: 'Development'
-      },
-      {
-        url: `${config.HOST ?? 'http://localhost:5000'}/api/v1`,
-        description: 'Production'
+        url: `${config.HOST ?? 'http://localhost:5000'}/api/v1`
       }
     ]
   },
