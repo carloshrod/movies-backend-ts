@@ -8,4 +8,6 @@
  *    responses:
  *      200:
  *        description: Server status OK
+ *      500:
+ *        description: Internal server error
  */

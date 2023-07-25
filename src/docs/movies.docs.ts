@@ -26,7 +26,7 @@
  *          description: Movie duration in minutes (1-999)
  *        release_date:
  *          type: string
- *          description: Valid movie release date
+ *          description: Valid movie release date (YYYY-MM-DD)
  *        trailer:
  *          type: string
  *          description: Valid movie trailer url
