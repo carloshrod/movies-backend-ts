@@ -2,7 +2,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import type { UploadApiResponse } from 'cloudinary';
 import config from '../config/config';
 
-const { CLOUD, MOVIES_POSTERS_FOLDER } = config;
+const { CLOUD } = config;
 
 cloudinary.config({
   cloud_name: CLOUD.NAME,
@@ -13,7 +13,7 @@ cloudinary.config({
 
 export const uploadImage = async (filePath: string): Promise<UploadApiResponse> => {
   return await cloudinary.uploader.upload(filePath, {
-    folder: MOVIES_POSTERS_FOLDER
+    folder: CLOUD.FOLDER
   });
 };
 

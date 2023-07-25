@@ -4,12 +4,12 @@ const config = {
   CLOUD: {
     NAME: process.env.CLOUD_NAME,
     API_KEY: process.env.CLOUD_API_KEY,
-    API_SECRET: process.env.CLOUD_API_SECRET
+    API_SECRET: process.env.CLOUD_API_SECRET,
+    FOLDER: process.env.CLOUD_FOLDER
   },
-  DATABASE_URL: process.env.DATABASE_URL,
+  HOST: process.env.HOST,
   TEMP_FILES_PATH: process.env.TEMP_FILES_PATH,
-  MOVIES_POSTERS_FOLDER: process.env.MOVIES_POSTERS_FOLDER,
-  HOST: process.env.HOST
+  DATABASE_URL: process.env.DATABASE_URL
 };
 
 export default config;
