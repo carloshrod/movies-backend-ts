@@ -12,11 +12,15 @@ router.get('/', (_req, res) => {
     `);
 });
 
-router.use('/api/v1/ping', async (_req, res) => {
-  const result = await pool.query('SELECT NOW()');
-  return res
-    .status(200)
-    .send({ ChrodApiSays: 'Server status is OK!', PostgreSays: result.rows[0] });
+router.use('/api/v1/ping', async (_req, res, next) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    return res
+      .status(200)
+      .send({ ChrodApiSays: 'Server status is OK!', PostgreSays: result.rows[0] });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.use('/api/v1/movies', movieRoutes);
